@@ -25,6 +25,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/books', require('./routes/books'));
 app.use('/api/reviews', require('./routes/reviews'));
+app.use('/api/borrows', require('./routes/borrows'));
 
 //All routers below will be protected 
 app.use(require('./middleware/ensureLoggedIn'));
