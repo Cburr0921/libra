@@ -1,14 +1,14 @@
 const Review = require('../models/review');
 
 module.exports = {
-    create,
-    index,
-    show,
-    update,
-    delete: deleteReview
+    reviewCreate,
+    reviewIndex,
+    reviewShow,
+    reviewUpdate,
+    reviewDelete
 };
 
-async function create(req, res) {
+async function reviewCreate(req, res) {
     try {
         // Add the user to the review
         req.body.user = req.user._id;
@@ -21,7 +21,7 @@ async function create(req, res) {
     }
 }
 
-async function index(req, res) {
+async function reviewIndex(req, res) {
     try {
         // Get all reviews for a specific book
         const reviews = await Review.find({ book_api_id: req.params.bookId })
@@ -33,7 +33,7 @@ async function index(req, res) {
     }
 }
 
-async function show(req, res) {
+async function reviewShow(req, res) {
     try {
         const review = await Review.findById(req.params.id).populate('user');
         if (!review) return res.status(404).json({ error: 'Review not found' });
@@ -43,7 +43,7 @@ async function show(req, res) {
     }
 }
 
-async function update(req, res) {
+async function reviewUpdate(req, res) {
     try {
         const review = await Review.findOneAndUpdate(
             { _id: req.params.id, user: req.user._id },
@@ -57,7 +57,7 @@ async function update(req, res) {
     }
 }
 
-async function deleteReview(req, res) {
+async function reviewDelete(req, res) {
     try {
         const review = await Review.findOneAndDelete({
             _id: req.params.id,
