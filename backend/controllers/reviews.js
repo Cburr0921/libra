@@ -3,6 +3,7 @@ const Review = require('../models/review');
 module.exports = {
     create,
     index,
+    show,
     update,
     delete: deleteReview
 };
@@ -27,6 +28,16 @@ async function index(req, res) {
             .populate('user')
             .sort('-createdAt');
         res.json(reviews);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}
+
+async function show(req, res) {
+    try {
+        const review = await Review.findById(req.params.id).populate('user');
+        if (!review) return res.status(404).json({ error: 'Review not found' });
+        res.json(review);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

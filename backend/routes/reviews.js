@@ -8,6 +8,9 @@ const ensureLoggedIn = require('../middleware/ensureLoggedIn');
 // GET /api/reviews/:bookId - Get all reviews for a specific book
 router.get('/:bookId', reviewsCtrl.index);
 
+// GET /api/reviews/detail/:id - Get a single review
+router.get('/detail/:id', reviewsCtrl.show);
+
 // POST /api/reviews - Create a new review
 router.post('/', ensureLoggedIn, reviewsCtrl.create);
 
