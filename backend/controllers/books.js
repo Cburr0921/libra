@@ -2,10 +2,7 @@ const Review = require('../models/review');
 
 module.exports = {
   search,
-  show,
-  addReview,
-  getReviews,
-  deleteReview
+  show
 };
 
 async function search(req, res) {
@@ -48,54 +45,5 @@ async function show(req, res) {
     res.json(bookDetails);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch book details' });
-  }
-}
-
-async function addReview(req, res) {
-  try {
-    const review = await Review.create({
-      openLibraryId: req.params.id,
-      user: req.user._id,
-      title: req.body.title,
-      author: req.body.author,
-      rating: req.body.rating,
-      review: req.body.review,
-      coverUrl: req.body.coverUrl,
-      publishYear: req.body.publishYear
-    });
-    
-    await review.populate('user', 'name');
-    res.status(201).json(review);
-  } catch (err) {
-    res.status(400).json({ error: 'Failed to create review' });
-  }
-}
-
-async function getReviews(req, res) {
-  try {
-    const reviews = await Review.find({ openLibraryId: req.params.id })
-      .populate('user', 'name')
-      .sort('-createdAt');
-    res.json(reviews);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch reviews' });
-  }
-}
-
-async function deleteReview(req, res) {
-  try {
-    const review = await Review.findOne({
-      _id: req.params.reviewId,
-      user: req.user._id
-    });
-    
-    if (!review) {
-      return res.status(404).json({ error: 'Review not found' });
-    }
-    
-    await review.deleteOne();
-    res.json({ message: 'Review deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to delete review' });
   }
 }

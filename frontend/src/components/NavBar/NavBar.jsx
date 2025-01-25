@@ -1,7 +1,6 @@
-import { NavLink, Link, useNavigate } from 'react-router';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import './NavBar.css';
 import { logOut } from '../../services/authService';
-import { set } from 'mongoose';
 
 export default function NavBar({ user, setUser }) {
   const navigate = useNavigate();
