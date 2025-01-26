@@ -1,87 +1,92 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import * as bookService from '../../services/bookService';
 import './BookSearchPage.css';
 
 export default function BookSearchPage() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const query = searchParams.get('q');
-    if (!query) {
-      setLoading(false);
-      return;
-    }
+    async function fetchBooks() {
+      const q = searchParams.get('q');
+      if (!q) return;
 
-    const fetchBooks = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/books/search?q=${encodeURIComponent(query)}`);
-        if (!response.ok) throw new Error('Failed to fetch books');
-        const data = await response.json();
-        setBooks(data);
-        setError(null);
+        setError('');
+        const results = await bookService.search(q);
+        setBooks(results);
       } catch (err) {
-        setError(err.message);
+        setError('Failed to search books. Please try again.');
+        setBooks([]);
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchBooks();
   }, [searchParams]);
 
-  const handleSearch = (evt) => {
+  async function handleSearch(evt) {
     evt.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/books/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
-  };
+  }
+
+  function handleChange(evt) {
+    setSearchQuery(evt.target.value);
+  }
 
   return (
-    <div className="book-search">
+    <div className="BookSearchPage">
       <h1>Search Books</h1>
+      
       <form onSubmit={handleSearch} className="search-form">
         <input
-          type="search"
-          id="book-search"
-          name="book-search"
-          placeholder="Search for books..."
+          type="text"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          required
+          onChange={handleChange}
+          placeholder="Search by title or author..."
+          className="search-input"
         />
-        <button type="submit" id="search-submit">Search</button>
+        <button type="submit" className="search-button">Search</button>
       </form>
+
+      {error && <p className="error-message">{error}</p>}
 
       {loading ? (
         <div className="loading">Loading...</div>
-      ) : error ? (
-        <div className="error">Error: {error}</div>
-      ) : books.length > 0 ? (
-        <div className="book-grid">
-          {books.map(book => (
-            <div key={book.openLibraryId} className="book-card">
-              {book.coverUrl && (
-                <img src={book.coverUrl} alt={book.title} className="book-cover" />
+      ) : (
+        <div className="books-grid">
+          {books.map((book) => (
+            <Link 
+              to={`/books${book.key}`} 
+              key={book.key}
+              className="book-card"
+            >
+              {book.cover_url && (
+                <img 
+                  src={book.cover_url} 
+                  alt={`Cover of ${book.title}`}
+                  className="book-cover"
+                />
               )}
               <div className="book-info">
-                <h3>
-                  <Link to={`/books${book.openLibraryId}`}>{book.title}</Link>
-                </h3>
-                <p>By {book.author}</p>
+                <h3>{book.title}</h3>
+                <p>{book.author}</p>
+                {book.first_publish_year && (
+                  <p className="publish-year">First published: {book.first_publish_year}</p>
+                )}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
-      ) : searchParams.get('q') ? (
-        <p>No books found</p>
-      ) : (
-        <p>Enter a search term to find books</p>
       )}
     </div>
   );

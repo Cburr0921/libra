@@ -8,6 +8,30 @@ module.exports = {
     reviewDelete
 };
 
+async function reviewIndex(req, res) {
+    try {
+        let query = {};
+        
+        // If bookId is provided, filter by book
+        if (req.params.bookId) {
+            query.book_api_id = req.params.bookId;
+        }
+        
+        // If my=true and user is logged in, filter by user
+        if (req.query.my === 'true' && req.user) {
+            query.user = req.user._id;
+        }
+        
+        const reviews = await Review.find(query)
+            .populate('user')
+            .sort('-createdAt')
+            .limit(req.query.my ? undefined : 10); // Only limit if not user's reviews
+        res.json(reviews);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}
+
 async function reviewCreate(req, res) {
     try {
         // Add the user to the review
@@ -16,24 +40,6 @@ async function reviewCreate(req, res) {
         // Populate the user information before sending back
         const populatedReview = await review.populate('user');
         res.status(201).json(populatedReview);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-}
-
-async function reviewIndex(req, res) {
-    try {
-        let query = {};
-        // If bookId is provided, filter by book
-        if (req.params.bookId) {
-            query.book_api_id = req.params.bookId;
-        }
-        
-        const reviews = await Review.find(query)
-            .populate('user')
-            .sort('-createdAt')
-            .limit(10); 
-        res.json(reviews);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

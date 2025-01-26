@@ -20,6 +20,8 @@ export default function NavBar({ user, setUser }) {
           &nbsp; | &nbsp;
           <NavLink to="/books/search">Search Books</NavLink>
           &nbsp; | &nbsp;
+          <NavLink to="/reviews/my">My Reviews</NavLink>
+          &nbsp; | &nbsp;
           <span>Welcome, {user.name}</span>
           &nbsp; | &nbsp;
           <Link to="" onClick={handleLogOut}>

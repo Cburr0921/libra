@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './BookDetailsPage.css';
 
-export default function BookDetailsPage() {
+export default function BookDetailsPage({ user }) {
+  const { id } = useParams();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { id } = useParams();
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -14,9 +14,9 @@ export default function BookDetailsPage() {
         setLoading(true);
         setError(null);
         
-        // Add /works/ prefix if not present
-        const fullId = id.startsWith('/works/') ? id : `/works/${id}`;
-        const apiUrl = `/api/books${fullId}`;
+        // Extract just the ID part if it includes /works/
+        const bookId = id.replace(/^\/works\//, '');
+        const apiUrl = `/api/books/${bookId}`;
         
         const response = await fetch(apiUrl);
         
@@ -34,10 +34,8 @@ export default function BookDetailsPage() {
       }
     };
 
-    if (id) {
-      fetchBookDetails();
-    }
-  }, [id]);
+    fetchBookDetails();
+  }, [id, user]);
 
   if (loading) {
     return (
@@ -68,31 +66,47 @@ export default function BookDetailsPage() {
   }
 
   return (
-    <div className="book-details">
-      <h1>{book.title}</h1>
-      <h2>by {book.author}</h2>
-      {book.coverUrl && (
-        <img src={book.coverUrl} alt={`Cover of ${book.title}`} className="book-cover" />
+    <div>
+      {!loading && !error && book && (
+        <div className="book-details">
+          {book.coverUrl && (
+            <img src={book.coverUrl} alt={book.title} className="book-cover" />
+          )}
+          <div className="book-info">
+            <h1>{book.title}</h1>
+            <h2>By {book.author}</h2>
+            <p className="publish-date">Published: {book.publishDate}</p>
+            <p className="description">{book.description}</p>
+            {book.subjects && book.subjects.length > 0 && (
+              <div className="subjects">
+                <h3>Subjects:</h3>
+                <ul>
+                  {book.subjects.slice(0, 5).map((subject, idx) => (
+                    <li key={idx}>{subject}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="actions">
+              {user ? (
+                <Link 
+                  to={`/books/works/${id}/review`}
+                  className="write-review-button"
+                >
+                  Write a Review
+                </Link>
+              ) : (
+                <Link 
+                  to="/login"
+                  className="write-review-button"
+                >
+                  Log in to Write a Review
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
       )}
-      <div className="book-info">
-        <p><strong>Published:</strong> {book.publishDate}</p>
-        {book.description && (
-          <div className="book-description">
-            <h3>Description</h3>
-            <p>{book.description}</p>
-          </div>
-        )}
-        {book.subjects && book.subjects.length > 0 && (
-          <div className="book-subjects">
-            <h3>Subjects</h3>
-            <ul>
-              {book.subjects.map((subject, index) => (
-                <li key={index}>{subject}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
