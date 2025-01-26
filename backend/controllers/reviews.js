@@ -32,7 +32,7 @@ async function reviewIndex(req, res) {
         const reviews = await Review.find(query)
             .populate('user')
             .sort('-createdAt')
-            .limit(10); // Limit to 10 most recent reviews
+            .limit(10); 
         res.json(reviews);
     } catch (err) {
         res.status(400).json({ error: err.message });
