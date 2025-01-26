@@ -10,25 +10,50 @@ export default function HomePage({ user }) {
 
   useEffect(() => {
     // Fetch active borrows if user is logged in
-    if (user) {
+    if (user && user.token) {
       fetch('/api/borrows/user', {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
       })
-      .then(res => res.json())
-      .then(data => {
-        const active = data.filter(borrow => !borrow.is_returned);
-        setActiveBorrows(active);
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
       })
-      .catch(console.error);
+      .then(data => {
+        if (Array.isArray(data)) {
+          const active = data.filter(borrow => !borrow.is_returned);
+          setActiveBorrows(active);
+        } else {
+          console.error('Expected array of borrows, got:', typeof data);
+          setActiveBorrows([]);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching borrows:', error);
+        setActiveBorrows([]);
+      });
+    } else {
+      setActiveBorrows([]); // Reset borrows if no user
     }
 
     // Fetch all recent reviews
     fetch('/api/reviews')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => {
-        setRecentReviews(Array.isArray(data) ? data : []);
+        if (!Array.isArray(data)) {
+          console.error('Expected array of reviews, got:', typeof data);
+          setRecentReviews([]);
+        } else {
+          setRecentReviews(data);
+        }
       })
       .catch(error => {
         console.error('Error fetching reviews:', error);
@@ -49,12 +74,15 @@ export default function HomePage({ user }) {
         
         <form onSubmit={handleSearch} className="search-form">
           <input
-            type="text"
+            type="search"
+            id="book-search"
+            name="book-search"
             placeholder="Search for books..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            required
           />
-          <button type="submit">Search</button>
+          <button type="submit" id="search-submit">Search</button>
         </form>
       </section>
 

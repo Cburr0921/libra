@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {useNavigate} from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import * as authService from '../../services/authService';
 
 export default function SignUpPage({setUser}) {
@@ -35,39 +35,43 @@ export default function SignUpPage({setUser}) {
     <>
       <h2>Sign Up!</h2>
       <form autoComplete="off" onSubmit={handleSubmit}>
-        <label>Name</label>
+        <label htmlFor="signup-name">Name</label>
         <input
           type="text"
           name="name"
+          id="signup-name"
           value={formData.name}
           onChange={handleChange}
           required
         />
-        <label>Email</label>
+        <label htmlFor="signup-email">Email</label>
         <input
           type="email"
           name="email"
+          id="signup-email"
           value={formData.email}
           onChange={handleChange}
           required
         />
-        <label>Password</label>
+        <label htmlFor="signup-password">Password</label>
         <input
           type="password"
           name="password"
+          id="signup-password"
           value={formData.password}
           onChange={handleChange}
           required
         />
-        <label>Confirm</label>
+        <label htmlFor="signup-confirm">Confirm Password</label>
         <input
           type="password"
           name="confirm"
+          id="signup-confirm"
           value={formData.confirm}
           onChange={handleChange}
           required
         />
-        <button type="submit" disabled={disable}>
+        <button type="submit" id="signup-submit" disabled={disable}>
           SIGN UP
         </button>
       </form>
