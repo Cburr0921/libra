@@ -23,10 +23,16 @@ async function reviewCreate(req, res) {
 
 async function reviewIndex(req, res) {
     try {
-        // Get all reviews for a specific book
-        const reviews = await Review.find({ book_api_id: req.params.bookId })
+        let query = {};
+        // If bookId is provided, filter by book
+        if (req.params.bookId) {
+            query.book_api_id = req.params.bookId;
+        }
+        
+        const reviews = await Review.find(query)
             .populate('user')
-            .sort('-createdAt');
+            .sort('-createdAt')
+            .limit(10); // Limit to 10 most recent reviews
         res.json(reviews);
     } catch (err) {
         res.status(400).json({ error: err.message });

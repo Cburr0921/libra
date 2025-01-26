@@ -12,22 +12,23 @@ export default function NavBar({ user, setUser }) {
   }
   return (
     <nav className="NavBar">
-      <NavLink to="/">Home</NavLink>
-      &nbsp; | &nbsp;
+      <NavLink to="/" end>
+        Home
+      </NavLink>
       {user ? (
         <>
-          <NavLink to="/posts" end>
-            Post List
-          </NavLink>
           &nbsp; | &nbsp;
-          <NavLink to="/posts/new">New Post</NavLink>
-          &nbsp; | &nbsp;
-          <Link to="/" onClick={handleLogOut}>Log Out</Link>
+          <NavLink to="/books/search">Search Books</NavLink>
           &nbsp; | &nbsp;
           <span>Welcome, {user.name}</span>
+          &nbsp; | &nbsp;
+          <Link to="" onClick={handleLogOut}>
+            Log Out
+          </Link>
         </>
       ) : (
         <>
+          &nbsp; | &nbsp;
           <NavLink to="/login">Log In</NavLink>
           &nbsp; | &nbsp;
           <NavLink to="/signup">Sign Up</NavLink>

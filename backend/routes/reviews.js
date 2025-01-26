@@ -5,6 +5,9 @@ const ensureLoggedIn = require('../middleware/ensureLoggedIn');
 
 // All routes start with '/api/reviews'
 
+// GET /api/reviews - Get all reviews
+router.get('/', reviewsCtrl.reviewIndex);
+
 // GET /api/reviews/:bookId - Get all reviews for a specific book
 router.get('/:bookId', reviewsCtrl.reviewIndex);
 

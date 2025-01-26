@@ -16,14 +16,14 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 // because forms are not submitted!
 app.use(express.json());
 
+// Public API Routes (no auth required)
+app.use('/api/books', require('./routes/books'));
 
-//Check & verufy token
+// Optional token checking - will set req.user if token is valid
 app.use(require('./middleware/checkToken'));
 
-// API Routes
+// Protected API Routes (auth required)
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/posts', require('./routes/posts'));
-app.use('/api/books', require('./routes/books'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/borrows', require('./routes/borrows'));
 

@@ -1,0 +1,152 @@
+.book-details {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.book-cover {
+  max-width: 300px;
+  height: auto;
+  margin: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.book-info {
+  margin-top: 1rem;
+}
+
+.book-info p {
+  margin: 0.5rem 0;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+.book-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.book-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.book-header h2 {
+  font-size: 1.5rem;
+  color: #7f8c8d;
+  font-weight: normal;
+  margin-bottom: 0.5rem;
+}
+
+.publish-date {
+  color: #95a5a6;
+  font-size: 1.1rem;
+}
+
+.book-content {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 2fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.book-cover {
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-cover img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.no-cover {
+  color: #95a5a6;
+  font-size: 1.1rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.book-info {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.book-info h3 {
+  font-size: 1.5rem;
+  margin: 1.5rem 0 1rem;
+  color: #2c3e50;
+}
+
+.book-info h3:first-child {
+  margin-top: 0;
+}
+
+.book-info p {
+  line-height: 1.6;
+  color: #34495e;
+  white-space: pre-line;
+}
+
+.book-subjects ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.book-subjects li {
+  background: #f0f2f5;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #34495e;
+}
+
+.more-subjects {
+  color: #7f8c8d !important;
+  background: #e9ecef !important;
+}
+
+@media (max-width: 768px) {
+  .book-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .book-cover {
+    margin-bottom: 2rem;
+    min-height: 300px;
+  }
+  
+  .book-cover img {
+    max-width: 300px;
+  }
+  
+  .book-header h1 {
+    font-size: 2rem;
+  }
+  
+  .book-header h2 {
+    font-size: 1.3rem;
+  }
+}
