@@ -1,5 +1,13 @@
 const Borrow = require('../models/borrow');
 
+async function isBookAvailable(bookApiId) {
+    const activeBorrow = await Borrow.findOne({
+        book_api_id: bookApiId,
+        is_returned: false
+    });
+    return !activeBorrow;
+}
+
 module.exports = {
     borrowCreate,
     borrowIndex,
@@ -13,6 +21,12 @@ module.exports = {
 
 async function borrowCreate(req, res) {
     try {
+        // Check if book is already borrowed
+        const isAvailable = await isBookAvailable(req.body.book_api_id);
+        if (!isAvailable) {
+            return res.status(400).json({ error: 'This book is currently borrowed by another user' });
+        }
+
         // Add the user to the borrow record
         req.body.user = req.user._id;
         

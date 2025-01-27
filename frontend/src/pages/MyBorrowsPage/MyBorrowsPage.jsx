@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserBorrows, returnBook } from '../../services/borrowService';
 import { getToken } from '../../services/authService';
-import './MyBorrowsPage.css';
 
 export default function MyBorrowsPage({ user }) {
   const navigate = useNavigate();
@@ -54,38 +53,35 @@ export default function MyBorrowsPage({ user }) {
   }
 
   if (loading) {
-    return <div className="loading">Loading your borrowed books...</div>;
+    return <div>Loading your borrowed books...</div>;
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>;
+    return <div>{error}</div>;
   }
 
   const activeBorrows = borrows.filter(borrow => !borrow.is_returned);
   const returnedBorrows = borrows.filter(borrow => borrow.is_returned);
 
   return (
-    <div className="MyBorrowsPage">
+    <div>
       <h1>My Borrowed Books</h1>
       
-      <section className="active-borrows">
+      <section>
         <h2>Currently Borrowed</h2>
         {activeBorrows.length === 0 ? (
           <p>You don't have any books borrowed at the moment.</p>
         ) : (
-          <ul className="borrows-list">
+          <ul>
             {activeBorrows.map(borrow => (
-              <li key={borrow._id} className="borrow-item">
-                <div className="book-info">
+              <li key={borrow._id}>
+                <div>
                   <h3>{borrow.book_title}</h3>
                   <p>By {borrow.book_author}</p>
                   <p>Borrowed on: {new Date(borrow.borrow_date).toLocaleDateString()}</p>
                   <p>Due on: {new Date(borrow.due_date).toLocaleDateString()}</p>
                 </div>
-                <button 
-                  onClick={() => handleReturn(borrow._id)}
-                  className="return-button"
-                >
+                <button onClick={() => handleReturn(borrow._id)}>
                   Return Book
                 </button>
               </li>
@@ -94,15 +90,15 @@ export default function MyBorrowsPage({ user }) {
         )}
       </section>
 
-      <section className="returned-borrows">
+      <section>
         <h2>Previously Borrowed</h2>
         {returnedBorrows.length === 0 ? (
           <p>You haven't returned any books yet.</p>
         ) : (
-          <ul className="borrows-list">
+          <ul>
             {returnedBorrows.map(borrow => (
-              <li key={borrow._id} className="borrow-item returned">
-                <div className="book-info">
+              <li key={borrow._id}>
+                <div>
                   <h3>{borrow.book_title}</h3>
                   <p>By {borrow.book_author}</p>
                   <p>Borrowed: {new Date(borrow.borrow_date).toLocaleDateString()}</p>

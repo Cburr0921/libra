@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { getToken } from '../../services/authService';
 import { getMyReviews, deleteReview } from '../../services/reviewService';
 import './MyReviewsPage.css';
@@ -80,6 +80,9 @@ export default function MyReviewsPage({ user }) {
                 >
                   View Book
                 </button>
+                <Link to={`/reviews/${review._id}/edit`}>
+                  Edit Review
+                </Link>
                 <button 
                   onClick={() => handleDeleteReview(review._id)}
                   className="delete-btn"
