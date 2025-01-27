@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
 /* Your custom styles below */
 
@@ -8,14 +6,13 @@
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color: #1a1a1a;
-  background-color: whitesmoke;
-
+  color-scheme: light dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #1a1a1a;
+  background-color: whitesmoke;
 }
 
 * {

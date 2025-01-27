@@ -6,6 +6,7 @@ import HomePage from '../HomePage/HomePage';
 import SignUpPage from '../SignUpPage/SignUpPage';
 import LogInPage from '../LogInPage/LogInPage';
 import NavBar from '../../components/NavBar/NavBar';
+import Footer from '../../components/Footer/Footer';
 import BookDetailsPage from '../BookDetailsPage/BookDetailsPage';
 import BookSearchPage from '../BookSearchPage/BookSearchPage';
 import ReviewPage from '../ReviewPage/ReviewPage';
@@ -17,9 +18,9 @@ export default function App() {
   const [user, setUser] = useState(getUser());
   
   return (
-    <main className="App">
+    <main className="App min-h-screen flex flex-col">
       <NavBar user={user} setUser={setUser} />
-      <section id="main-section">
+      <section id="main-section" className="flex-grow">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage user={user} />} />
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="*" element={<HomePage user={user} />} />
         </Routes>
       </section>
+      <Footer />
     </main>
   );
 }
