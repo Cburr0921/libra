@@ -12,9 +12,12 @@ async function reviewIndex(req, res) {
     try {
         let query = {};
         
-        // If bookId is provided, filter by book
-        if (req.params.bookId) {
-            query.book_api_id = req.params.bookId;
+        // If bookId is provided in query params, filter by book
+        if (req.query.bookId) {
+            // Ensure exact match with the OpenLibrary ID
+            query.openLibraryId = {
+                $eq: req.query.bookId  // Use exact match operator
+            };
         }
         
         // If my=true and user is logged in, filter by user
@@ -22,12 +25,15 @@ async function reviewIndex(req, res) {
             query.user = req.user._id;
         }
         
+        // Find reviews with exact match
         const reviews = await Review.find(query)
             .populate('user')
             .sort('-createdAt')
-            .limit(req.query.my ? undefined : 10); // Only limit if not user's reviews
+            .limit(req.query.my ? undefined : 10);
+        
         res.json(reviews);
     } catch (err) {
+        console.error('Error in reviewIndex:', err);
         res.status(400).json({ error: err.message });
     }
 }
@@ -39,8 +45,10 @@ async function reviewCreate(req, res) {
         const review = await Review.create(req.body);
         // Populate the user information before sending back
         const populatedReview = await review.populate('user');
+        
         res.status(201).json(populatedReview);
     } catch (err) {
+        console.error('Error creating review:', err);
         res.status(400).json({ error: err.message });
     }
 }

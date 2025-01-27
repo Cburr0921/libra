@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node ./backend/server.js",
+    "dev": "nodemon ./backend/server.js",
     "build": "npm install && npm --prefix ./frontend install  && npm --prefix ./frontend run build"
   },
   "keywords": [],
@@ -15,6 +16,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   },
   "main": "./backend/server.js",
   "description": ""

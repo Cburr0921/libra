@@ -50,18 +50,19 @@ export default function ReviewPage({ user }) {
         throw new Error('Book details not loaded');
       }
 
-      // Extract just the ID part if it includes /works/
-      const workId = id.replace(/^\/works\//, '');
+      // Remove any '/works/' prefix if present and then add it back in the correct format
+      const bookId = id.replace(/^\/works\//, '');
+      const openLibraryId = `/works/${bookId}`;
 
       await create({
         ...formData,
-        openLibraryId: `/works/${workId}`,
+        openLibraryId,
         title: book.title,
         author: book.author,
       });
 
-      // Navigate back to the book details page after successful submission
-      navigate(`/books/works/${workId}`);
+      // Navigate back to the book details page with the correct path
+      navigate(`/books/works/${bookId}`);
     } catch (err) {
       setError(err.message || 'Failed to submit review. Please try again.');
       // If token is invalid, redirect to login
@@ -135,7 +136,7 @@ export default function ReviewPage({ user }) {
               <button type="submit">Submit Review</button>
               <button 
                 type="button" 
-                onClick={() => navigate(`/books/works/${id.replace(/^\/works\//, '')}`)}
+                onClick={() => navigate(`/books/works/${id}`)}
                 className="cancel-button"
               >
                 Cancel

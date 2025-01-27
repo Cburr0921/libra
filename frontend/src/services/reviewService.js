@@ -25,3 +25,7 @@ export async function update(reviewId, reviewData) {
 export async function deleteReview(reviewId) {
   return sendRequest(`${BASE_URL}/${reviewId}`, 'DELETE');
 }
+
+export async function getBookReviews(bookId) {
+  return sendRequest(`${BASE_URL}?bookId=${bookId}`);
+}
