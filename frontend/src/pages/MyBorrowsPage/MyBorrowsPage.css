@@ -1,0 +1,81 @@
+.MyBorrowsPage {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.MyBorrowsPage h1 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+.MyBorrowsPage section {
+  margin-bottom: 40px;
+}
+
+.MyBorrowsPage h2 {
+  color: #34495e;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.borrows-list {
+  list-style: none;
+  padding: 0;
+}
+
+.borrow-item {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.borrow-item.returned {
+  background: #f8f9fa;
+}
+
+.book-info h3 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+}
+
+.book-info p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.return-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.return-button:hover {
+  background-color: #2980b9;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.error-message {
+  color: #e74c3c;
+  text-align: center;
+  padding: 20px;
+  background: #fdf0ef;
+  border-radius: 5px;
+  margin: 20px 0;
+}

@@ -11,6 +11,14 @@ const borrowSchema = new Schema({
         type: String,
         required: true
     },
+    book_title: {
+        type: String,
+        required: true
+    },
+    book_author: {
+        type: String,
+        required: true
+    },
     borrow_date: {
         type: Date,
         required: true,
@@ -31,7 +39,6 @@ const borrowSchema = new Schema({
 }, {
     timestamps: true
 });
-
 
 borrowSchema.index({ user: 1, book_api_id: 1 });
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { createBorrow } from '../../services/borrowService';
 import './BookDetailsPage.css';
 
 export default function BookDetailsPage({ user }) {
@@ -7,6 +8,7 @@ export default function BookDetailsPage({ user }) {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [borrowStatus, setBorrowStatus] = useState({ loading: false, error: null });
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -36,6 +38,19 @@ export default function BookDetailsPage({ user }) {
 
     fetchBookDetails();
   }, [id, user]);
+
+  const handleBorrow = async () => {
+    try {
+      setBorrowStatus({ loading: true, error: null });
+      await createBorrow(id, book.title, book.author);
+      setBorrowStatus({ loading: false, error: null });
+      // Show success message or redirect to MyBorrows page
+      alert('Book borrowed successfully! It is due in 2 weeks.');
+    } catch (err) {
+      console.error('Error borrowing book:', err);
+      setBorrowStatus({ loading: false, error: err.message });
+    }
+  };
 
   if (loading) {
     return (
@@ -89,18 +104,30 @@ export default function BookDetailsPage({ user }) {
             )}
             <div className="actions">
               {user ? (
-                <Link 
-                  to={`/books/works/${id}/review`}
-                  className="write-review-button"
-                >
-                  Write a Review
-                </Link>
+                <>
+                  <Link 
+                    to={`/books/works/${id}/review`}
+                    className="write-review-button"
+                  >
+                    Write a Review
+                  </Link>
+                  <button 
+                    onClick={handleBorrow}
+                    disabled={borrowStatus.loading}
+                    className="borrow-button"
+                  >
+                    {borrowStatus.loading ? 'Borrowing...' : 'Borrow Book'}
+                  </button>
+                  {borrowStatus.error && (
+                    <p className="error-message">{borrowStatus.error}</p>
+                  )}
+                </>
               ) : (
                 <Link 
                   to="/login"
                   className="write-review-button"
                 >
-                  Log in to Write a Review
+                  Log in to Write Reviews and Borrow Books
                 </Link>
               )}
             </div>

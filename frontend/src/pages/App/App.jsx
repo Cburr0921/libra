@@ -10,6 +10,7 @@ import BookDetailsPage from '../BookDetailsPage/BookDetailsPage';
 import BookSearchPage from '../BookSearchPage/BookSearchPage';
 import ReviewPage from '../ReviewPage/ReviewPage';
 import MyReviewsPage from '../MyReviewsPage/MyReviewsPage';
+import MyBorrowsPage from '../MyBorrowsPage/MyBorrowsPage';
 
 export default function App() {
   const [user, setUser] = useState(getUser());
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/books/works/:id" element={<BookDetailsPage user={user} />} />
           <Route path="/reviews/works/:id" element={<ReviewPage user={user} />} />
           <Route path="/reviews/my" element={<MyReviewsPage user={user} />} />
+          <Route path="/borrows/my" element={<MyBorrowsPage user={user} />} />
           <Route path="/signup" element={<SignUpPage setUser={setUser} />} />
           <Route path="/login" element={<LogInPage setUser={setUser} />} />
           

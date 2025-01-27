@@ -92,7 +92,7 @@ async function borrowReturn(req, res) {
 
         borrow.is_returned = true;
         borrow.return_date = new Date();
-        await borrow.save();
+        await borrow.save({ validateBeforeSave: false });
 
         const populatedBorrow = await borrow.populate('user');
         res.json(populatedBorrow);
