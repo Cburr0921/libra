@@ -10,6 +10,12 @@ export default function BookSearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Function to construct cover URL from cover_i
+  const getCoverUrl = (coverId, size = 'M') => {
+    if (!coverId) return null;
+    return `https://covers.openlibrary.org/b/id/${coverId}-${size}.jpg`;
+  };
+
   useEffect(() => {
     async function fetchBooks() {
       const q = searchParams.get('q');
@@ -19,8 +25,20 @@ export default function BookSearchPage() {
         setLoading(true);
         setError('');
         const results = await bookService.search(q);
-        setBooks(results);
+        // Ensure results is an array before setting it
+        if (results && results.docs) {
+          // Map over the docs to add cover_url
+          const booksWithCovers = results.docs.map(book => ({
+            ...book,
+            cover_url: getCoverUrl(book.cover_i)
+          }));
+          setBooks(booksWithCovers);
+        } else {
+          setBooks([]);
+          setError('No results found');
+        }
       } catch (err) {
+        console.error('Search error:', err);
         setError('Failed to search books. Please try again.');
         setBooks([]);
       } finally {
@@ -99,40 +117,43 @@ export default function BookSearchPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              {books.map((book) => (
-                <Link 
-                  to={`/books${book.key}`} 
-                  key={book.key}
-                  className="group relative"
-                >
-                  <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-white/20 backdrop-blur-sm">
-                    {book.cover_url ? (
-                      <img 
-                        src={book.cover_url} 
-                        alt={`Cover of ${book.title}`}
-                        className="h-full w-full object-cover object-center group-hover:opacity-75"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center bg-gray-200/20 text-white">
-                        No Cover
-                      </div>
-                    )}
-                  </div>
-                  <div className="mt-4 space-y-2">
-                    <h3 className="text-sm font-medium text-white">
-                      {book.title}
-                    </h3>
-                    <p className="text-sm text-gray-200">
-                      {book.author}
-                    </p>
-                    {book.first_publish_year && (
-                      <p className="text-sm text-gray-200">
-                        First published: {book.first_publish_year}
-                      </p>
-                    )}
-                  </div>
-                </Link>
-              ))}
+              {Array.isArray(books) && books.length > 0 ? (
+                books.map((book) => (
+                  <Link 
+                    to={`/books/works/${book.key?.replace('/works/', '')}`}
+                    key={book.key || book.id}
+                    className="group relative"
+                  >
+                    <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-white/20 backdrop-blur-sm">
+                      {book.cover_url ? (
+                        <img 
+                          src={book.cover_url}
+                          alt={`Cover of ${book.title}`}
+                          className="h-full w-full object-cover object-center group-hover:opacity-75"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center bg-gray-200/20 text-white">
+                          No Cover
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-4 space-y-2">
+                      <h3 className="text-lg font-medium text-white">
+                        {book.title}
+                      </h3>
+                      {book.author_name && (
+                        <p className="text-sm text-gray-300">
+                          {Array.isArray(book.author_name) ? book.author_name.join(', ') : book.author_name}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                ))
+              ) : !loading && !error && (
+                <div className="col-span-full text-center text-white text-lg">
+                  No books found. Try a different search term.
+                </div>
+              )}
             </div>
           )}
         </div>
