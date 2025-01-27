@@ -16,7 +16,7 @@ export default function NavBar({ user, setUser }) {
     `${isActive ? 'text-black font-semibold' : 'text-gray-600'} hover:text-black px-3 py-2 text-sm font-medium transition-colors`;
 
   return (
-    <nav className="bg-white shadow">
+    <nav className="bg-white/95 backdrop-blur-sm shadow sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex">
