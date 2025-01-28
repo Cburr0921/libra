@@ -1,4 +1,5 @@
 const Borrow = require('../models/borrow');
+const Wishlist = require('../models/wishlist');
 
 async function isBookAvailable(bookApiId) {
     const activeBorrow = await Borrow.findOne({
@@ -108,8 +109,20 @@ async function borrowReturn(req, res) {
         borrow.return_date = new Date();
         await borrow.save({ validateBeforeSave: false });
 
+        // Find users who have this book in their wishlist
+        const wishlistUsers = await Wishlist.find({
+            book_api_id: borrow.book_api_id
+        }).populate('user');
+
+        // In a real application, you would send email notifications here
+        const notifications = wishlistUsers.map(wishlistItem => ({
+            userId: wishlistItem.user._id,
+            userEmail: wishlistItem.user.email,
+            message: `The book "${borrow.book_title}" is now available!`
+        }));
+
         const populatedBorrow = await borrow.populate('user');
-        res.json(populatedBorrow);
+        res.json({ borrow: populatedBorrow, notifications });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

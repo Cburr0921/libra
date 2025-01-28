@@ -51,13 +51,18 @@ export async function returnBook(borrowId) {
     const res = await fetch(`${BASE_URL}/${borrowId}/return`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${getToken()}`
       }
     });
     
     if (res.ok) {
-      return await res.json();
+      const data = await res.json();
+      // Show notification to users if any
+      if (data.notifications && data.notifications.length > 0) {
+        // In a real app, we'd handle these notifications better
+        console.log('Book availability notifications:', data.notifications);
+      }
+      return data.borrow;
     } else {
       throw new Error('Failed to return book');
     }

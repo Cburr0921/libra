@@ -35,12 +35,10 @@ export default function MyBorrowsPage({ user }) {
 
   const handleReturn = async (borrowId) => {
     try {
-      await returnBook(borrowId);
-      // Update the borrows list after returning
+      const returnedBorrow = await returnBook(borrowId);
+      // Update the borrows list with the returned data
       const updatedBorrows = borrows.map(borrow => 
-        borrow._id === borrowId 
-          ? { ...borrow, is_returned: true, return_date: new Date() }
-          : borrow
+        borrow._id === borrowId ? returnedBorrow : borrow
       );
       setBorrows(updatedBorrows);
     } catch (err) {

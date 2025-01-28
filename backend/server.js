@@ -26,6 +26,7 @@ app.use(require('./middleware/checkToken'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/borrows', require('./routes/borrows'));
+app.use('/api/wishlists', require('./routes/wishlists'));
 
 //All routers below will be protected 
 app.use(require('./middleware/ensureLoggedIn'));

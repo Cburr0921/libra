@@ -47,4 +47,13 @@ borrowSchema.virtual('is_overdue').get(function() {
     return new Date() > this.due_date;
 });
 
+// Static method to check if a book is currently borrowed
+borrowSchema.statics.isBookBorrowed = async function(bookApiId) {
+    const activeBorrow = await this.findOne({
+        book_api_id: bookApiId,
+        is_returned: false
+    });
+    return activeBorrow !== null;
+};
+
 module.exports = mongoose.model('Borrow', borrowSchema);

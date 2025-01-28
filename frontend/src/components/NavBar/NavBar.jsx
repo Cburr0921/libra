@@ -42,6 +42,9 @@ export default function NavBar({ user, setUser }) {
                   <NavLink to="/borrows/my" className={navLinkClasses}>
                     My Borrows
                   </NavLink>
+                  <NavLink to="/wishlist" className={navLinkClasses}>
+                    My Wishlist
+                  </NavLink>
                 </>
               )}
             </div>
@@ -141,6 +144,14 @@ export default function NavBar({ user, setUser }) {
                 >
                   My Borrows
                 </NavLink>
+                <NavLink
+                  to="/wishlist"
+                  className={({ isActive }) =>
+                    `${isActive ? 'bg-gray-100 text-black' : 'text-gray-600'} block px-3 py-2 text-base font-medium hover:text-black hover:bg-gray-50`
+                  }
+                >
+                  My Wishlist
+                </NavLink>
               </>
             )}
           </div>
@@ -150,6 +161,15 @@ export default function NavBar({ user, setUser }) {
                 <div className="px-4 py-2">
                   <div className="text-base font-medium text-gray-800">Welcome, {user.name}</div>
                 </div>
+                <NavLink to="/reviews/my" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+                  My Reviews
+                </NavLink>
+                <NavLink to="/borrows/my" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+                  My Borrows
+                </NavLink>
+                <NavLink to="/wishlist" className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+                  My Wishlist
+                </NavLink>
                 <button
                   onClick={handleLogOut}
                   className="block w-full px-4 py-2 text-left text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-black"

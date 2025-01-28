@@ -24,7 +24,26 @@ router.post('/', ensureLoggedIn, borrowsCtrl.borrowCreate);
 router.put('/:id', ensureLoggedIn, borrowsCtrl.borrowUpdate);
 
 // PUT /api/borrows/:id/return - Return a borrowed book
-router.put('/:id/return', ensureLoggedIn, borrowsCtrl.borrowReturn);
+router.put('/:id/return', ensureLoggedIn, async (req, res) => {
+    try {
+        const borrow = await borrowsCtrl.borrowReturn(req, res);
+
+        // Find users who have this book in their wishlist
+        const wishlistUsers = await borrowsCtrl.getWishlistUsers(borrow.book_api_id);
+
+        // In a real application, you would send email notifications here
+        // For now, we'll just include the notification in the response
+        const notifications = wishlistUsers.map(wishlistItem => ({
+            userId: wishlistItem.user._id,
+            userEmail: wishlistItem.user.email,
+            message: `The book "${borrow.book_title}" is now available!`
+        }));
+
+        res.json({ borrow, notifications });
+    } catch (err) {
+        res.status(400).json(err);
+    }
+});
 
 // DELETE /api/borrows/:id - Delete a borrow record
 router.delete('/:id', ensureLoggedIn, borrowsCtrl.borrowDelete);

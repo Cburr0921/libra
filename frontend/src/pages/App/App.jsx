@@ -14,6 +14,7 @@ import MyReviewsPage from '../MyReviewsPage/MyReviewsPage';
 import MyBorrowsPage from '../MyBorrowsPage/MyBorrowsPage';
 import EditReviewPage from '../EditReviewPage/EditReviewPage';
 import AboutPage from '../AboutPage/AboutPage';
+import WishlistPage from '../WishlistPage/WishlistPage';
 
 export default function App() {
   const [user, setUser] = useState(getUser());
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/reviews/my" element={<MyReviewsPage user={user} />} />
           <Route path="/reviews/:reviewId/edit" element={<EditReviewPage user={user} />} />
           <Route path="/borrows/my" element={<MyBorrowsPage user={user} />} />
+          <Route path="/wishlist" element={<WishlistPage user={user} />} />
           <Route path="/signup" element={<SignUpPage setUser={setUser} />} />
           <Route path="/login" element={<LogInPage setUser={setUser} />} />
           <Route path="/about" element={<AboutPage />} />
