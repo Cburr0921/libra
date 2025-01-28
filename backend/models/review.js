@@ -43,4 +43,7 @@ const reviewSchema = new Schema(
   }
 );
 
+// Add compound index to prevent multiple reviews from same user on same book
+reviewSchema.index({ user: 1, openLibraryId: 1 }, { unique: true });
+
 module.exports = mongoose.model('Review', reviewSchema);

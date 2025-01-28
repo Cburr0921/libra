@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
+import logo from '../../assets/libra-logo.svg';
 
 export default function Footer() {
   return (
     <footer className="bg-white/95 backdrop-blur-sm sticky bottom-0 z-50">
       <div className="mx-auto max-w-7xl px-6 py-12 flex flex-col items-center">
         <div className="mb-8">
-          <Link to="/" className="flex items-center justify-center">
+          <Link to="/" className="flex items-center justify-center space-x-2">
+            <img src={logo} alt="Libra Logo" className="h-8 w-8" />
             <span className="text-2xl font-bold text-black">Libra</span>
           </Link>
         </div>

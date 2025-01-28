@@ -87,6 +87,8 @@ export default function BookSearchPage() {
               <form onSubmit={handleSearch} className="flex max-w-md mx-auto gap-x-4">
                 <input
                   type="text"
+                  id="book-search"
+                  name="search"
                   value={searchQuery}
                   onChange={handleChange}
                   placeholder="Search by title or author..."

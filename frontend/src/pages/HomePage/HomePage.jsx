@@ -75,6 +75,8 @@ export default function HomePage({ user }) {
               <form onSubmit={handleSearch} className="flex max-w-md mx-auto gap-x-4">
                 <input
                   type="search"
+                  id="home-search"
+                  name="search"
                   placeholder="Search for books..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

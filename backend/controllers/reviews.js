@@ -40,6 +40,18 @@ async function reviewIndex(req, res) {
 
 async function reviewCreate(req, res) {
     try {
+        // Check if user already has a review for this book
+        const existingReview = await Review.findOne({
+            user: req.user._id,
+            openLibraryId: req.body.openLibraryId
+        });
+
+        if (existingReview) {
+            return res.status(400).json({ 
+                error: 'You have already reviewed this book. You can edit your existing review instead.' 
+            });
+        }
+
         // Add the user to the review
         req.body.user = req.user._id;
         const review = await Review.create(req.body);
@@ -49,6 +61,12 @@ async function reviewCreate(req, res) {
         res.status(201).json(populatedReview);
     } catch (err) {
         console.error('Error creating review:', err);
+        // Check if error is a duplicate key error
+        if (err.code === 11000) {
+            return res.status(400).json({ 
+                error: 'You have already reviewed this book. You can edit your existing review instead.' 
+            });
+        }
         res.status(400).json({ error: err.message });
     }
 }

@@ -1,6 +1,7 @@
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { logOut } from '../../services/authService';
 import { useState } from 'react';
+import logo from '../../assets/libra-logo.svg';
 
 export default function NavBar({ user, setUser }) {
   const navigate = useNavigate();
@@ -21,19 +22,20 @@ export default function NavBar({ user, setUser }) {
         <div className="flex h-16 justify-between">
           <div className="flex">
             <div className="flex flex-shrink-0 items-center">
-              <NavLink to="/" className="text-xl font-bold text-black hover:text-black">
-                Libra
+              <NavLink to="/" className="flex items-center space-x-2 text-xl font-bold text-black hover:text-black">
+                <img src={logo} alt="Libra Logo" className="h-8 w-8" />
+                <span>Libra</span>
               </NavLink>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <NavLink to="/" end className={navLinkClasses}>
                 Home
               </NavLink>
+              <NavLink to="/books/search" className={navLinkClasses}>
+                Search Books
+              </NavLink>
               {user && (
                 <>
-                  <NavLink to="/books/search" className={navLinkClasses}>
-                    Search Books
-                  </NavLink>
                   <NavLink to="/reviews/my" className={navLinkClasses}>
                     My Reviews
                   </NavLink>
@@ -113,16 +115,16 @@ export default function NavBar({ user, setUser }) {
             >
               Home
             </NavLink>
+            <NavLink
+              to="/books/search"
+              className={({ isActive }) =>
+                `${isActive ? 'bg-gray-100 text-black' : 'text-gray-600'} block px-3 py-2 text-base font-medium hover:text-black hover:bg-gray-50`
+              }
+            >
+              Search Books
+            </NavLink>
             {user && (
               <>
-                <NavLink
-                  to="/books/search"
-                  className={({ isActive }) =>
-                    `${isActive ? 'bg-gray-100 text-black' : 'text-gray-600'} block px-3 py-2 text-base font-medium hover:text-black hover:bg-gray-50`
-                  }
-                >
-                  Search Books
-                </NavLink>
                 <NavLink
                   to="/reviews/my"
                   className={({ isActive }) =>
