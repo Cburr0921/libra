@@ -31,8 +31,6 @@ router.put('/:id/return', ensureLoggedIn, async (req, res) => {
         // Find users who have this book in their wishlist
         const wishlistUsers = await borrowsCtrl.getWishlistUsers(borrow.book_api_id);
 
-        // In a real application, you would send email notifications here
-        // For now, we'll just include the notification in the response
         const notifications = wishlistUsers.map(wishlistItem => ({
             userId: wishlistItem.user._id,
             userEmail: wishlistItem.user.email,
