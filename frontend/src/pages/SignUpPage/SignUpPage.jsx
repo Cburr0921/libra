@@ -24,8 +24,7 @@ export default function SignUpPage({setUser}) {
       setUser(user);
       navigate('/');
     } catch (err) {
-      console.log(err);
-      setErrorMsg('Sign Up Failed - Try Again');
+      setErrorMsg('Sign up failed - please try again');
     }
   }
 

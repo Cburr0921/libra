@@ -44,8 +44,7 @@ export default function MyBorrowsPage({ user }) {
         setBorrows(updatedBorrows);
       }
     } catch (err) {
-      console.error('Error returning book:', err);
-      setError('Failed to return book');
+      setError('Failed to return book. Please try again.');
     }
   };
 

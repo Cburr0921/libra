@@ -38,9 +38,8 @@ export default function BookSearchPage() {
           setError('No results found');
         }
       } catch (err) {
-        console.error('Search error:', err);
-        setError('Failed to search books. Please try again.');
-        setBooks([]);
+        setError('Failed to perform search. Please try again.');
+        setLoading(false);
       } finally {
         setLoading(false);
       }

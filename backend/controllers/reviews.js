@@ -33,8 +33,7 @@ async function reviewIndex(req, res) {
         
         res.json(reviews);
     } catch (err) {
-        console.error('Error in reviewIndex:', err);
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ error: 'Failed to fetch reviews' });
     }
 }
 
@@ -60,14 +59,7 @@ async function reviewCreate(req, res) {
         
         res.status(201).json(populatedReview);
     } catch (err) {
-        console.error('Error creating review:', err);
-        // Check if error is a duplicate key error
-        if (err.code === 11000) {
-            return res.status(400).json({ 
-                error: 'You have already reviewed this book. You can edit your existing review instead.' 
-            });
-        }
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ error: 'Failed to create review' });
     }
 }
 

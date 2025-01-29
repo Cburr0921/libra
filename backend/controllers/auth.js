@@ -14,8 +14,7 @@ async function signUp (req, res) {
     const token = createJWT(user); 
     res.json(token);
    } catch (err){
-    console.log(err);
-    res.status(400).json({ message: 'Duplicate Email' });
+    res.status(400).json({ error: 'Failed to create user' });
    }
 }
 

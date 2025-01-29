@@ -24,13 +24,14 @@ async function show(req, res) {
     const idParam = req.params.id;
     
     // Extract just the ID part if it includes /works/
-    const workId = idParam.match(/OL\d+W/)?.[0];
+    const idMatch = idParam.match(/OL\d+W/);
     
-    if (!workId) {
-      console.error('Invalid OpenLibrary ID format:', idParam);
+    if (!idMatch) {
       return res.status(400).json({ error: 'Invalid OpenLibrary ID format' });
     }
-
+    
+    const workId = idMatch[0];
+    
     // Fetch initial book data
     let response = await fetch(`https://openlibrary.org/works/${workId}.json`);
     
@@ -72,7 +73,6 @@ async function show(req, res) {
     
     res.json(formattedBook);
   } catch (err) {
-    console.error('Error fetching book details:', err);
     res.status(500).json({ error: 'Failed to fetch book details' });
   }
 }

@@ -5,18 +5,13 @@ const booksCtrl = require('../controllers/books');
 // All routes start with '/api/books'
 
 // GET /api/books/search
-router.get('/search', booksCtrl.search);
-
-// Log all requests
-router.use((req, res, next) => {
-  console.log('Books API request:', {
-    method: req.method,
-    path: req.path,
-    params: req.params,
-    query: req.query,
-    baseUrl: req.baseUrl
-  });
-  next();
+router.get('/search', async (req, res) => {
+  try {
+    const searchUrl = `${OPENLIBRARY_API_URL}/search.json?q=${encodeURIComponent(req.query.q)}`;
+    booksCtrl.search(req, res);
+  } catch (err) {
+    // You may want to add error handling here
+  }
 });
 
 // GET /api/books/works/OL...W or /api/books/OL...W
