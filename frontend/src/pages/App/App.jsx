@@ -24,7 +24,6 @@ export default function App() {
       <NavBar user={user} setUser={setUser} />
       <section id="main-section" className="flex-grow">
         <Routes>
-          {/* Public Routes */}
           <Route path="/" element={<HomePage user={user} />} />
           <Route path="/books/search" element={<BookSearchPage />} />
           <Route path="/books/works/:id" element={<BookDetailsPage user={user} />} />
@@ -36,9 +35,6 @@ export default function App() {
           <Route path="/signup" element={<SignUpPage setUser={setUser} />} />
           <Route path="/login" element={<LogInPage setUser={setUser} />} />
           <Route path="/about" element={<AboutPage />} />
-          
-          {/* Protected Routes */}
-          {/* Fallback Route */}
           <Route path="*" element={<HomePage user={user} />} />
         </Routes>
       </section>
