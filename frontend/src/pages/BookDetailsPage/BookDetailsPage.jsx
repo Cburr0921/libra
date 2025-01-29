@@ -63,7 +63,7 @@ export default function BookDetailsPage({ user }) {
       await createBorrow(
         id,
         book.title,
-        book.authors?.[0]?.name || 'Unknown Author'
+        book.author
       );
       setBorrowStatus({ loading: false, error: null });
       alert('Book borrowed successfully! It is due in 2 weeks.');
@@ -88,7 +88,7 @@ export default function BookDetailsPage({ user }) {
       await wishlistService.addToWishlist(
         id,
         book.title,
-        book.authors?.[0]?.name || 'Unknown Author'
+        book.author
       );
       setWishlistStatus({ loading: false, error: null, added: true });
       alert('Book added to wishlist!');
@@ -146,7 +146,7 @@ export default function BookDetailsPage({ user }) {
               {/* Book Info */}
               <div className="flex-grow">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">{book.title}</h1>
-                <h2 className="text-xl text-gray-600 mb-4">By {book.authors?.[0]?.name || 'Unknown Author'}</h2>
+                <h2 className="text-xl text-gray-600 mb-4">By {book.author}</h2>
                 <p className="text-sm text-gray-500 mb-4">Published: {book.publishDate}</p>
                 <p className="text-gray-700 mb-6">{book.description}</p>
 

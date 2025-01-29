@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node ./backend/server.js",
+    "dev": "nodemon ./backend/server.js",
     "build": "npm install && npm --prefix ./frontend install && npm --prefix ./frontend run build"
   },
   "keywords": [],

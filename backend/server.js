@@ -10,10 +10,21 @@ require('dotenv').config();
 require('./db');
 
 app.use(logger('dev'));
+
+// Disable caching for API routes
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set('Expires', '-1');
+  res.set('Pragma', 'no-cache');
+  next();
+});
+
 // Serve static assets from the frontend's built code folder (dist)
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-// Note that express.urlencoded middleware is not needed
-// because forms are not submitted!
+app.use(express.static(path.join(__dirname, '../frontend/dist'), {
+  etag: false,
+  lastModified: false
+}));
+
 app.use(express.json());
 
 // Public API Routes (no auth required)

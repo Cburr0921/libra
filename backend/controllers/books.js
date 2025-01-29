@@ -12,7 +12,7 @@ async function search(req, res) {
     if (!response.ok) throw new Error('Failed to fetch from OpenLibrary');
     
     const data = await response.json();
-    res.json(data);  // Return the raw response from OpenLibrary
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: 'Failed to search books' });
   }
@@ -20,57 +20,54 @@ async function search(req, res) {
 
 async function show(req, res) {
   try {
-    // Extract the work ID from the URL parameters
-    const idParam = req.params.id;
+    const bookId = req.bookId;
     
-    // Extract just the ID part if it includes /works/
-    const idMatch = idParam.match(/OL\d+W/);
-    
-    if (!idMatch) {
+    if (!bookId || !bookId.match(/OL\d+W/)) {
       return res.status(400).json({ error: 'Invalid OpenLibrary ID format' });
     }
+
+    // Fetch book data
+    const workUrl = `https://openlibrary.org/works/${bookId}.json`;
+    const bookResponse = await fetch(workUrl);
     
-    const workId = idMatch[0];
-    
-    // Fetch initial book data
-    let response = await fetch(`https://openlibrary.org/works/${workId}.json`);
-    
-    if (!response.ok) {
-      if (response.status === 404) {
-        return res.status(404).json({ error: 'Book not found' });
-      }
-      throw new Error(`Failed to fetch book details: ${response.status}`);
+    if (!bookResponse.ok) {
+      return res.status(bookResponse.status).json({ error: 'Failed to fetch book' });
     }
-    
-    const bookData = await response.json();
-    
-    // Get the first author key if available
-    const authorKey = bookData.authors?.[0]?.author?.key;
+
+    const bookData = await bookResponse.json();
+
+    // Get author data
     let authorName = 'Unknown Author';
-    
-    if (authorKey) {
-      // Fetch author details
-      const authorResponse = await fetch(`https://openlibrary.org${authorKey}.json`);
-      if (authorResponse.ok) {
-        const authorData = await authorResponse.json();
-        authorName = authorData.name || authorName;
+    if (bookData.authors && bookData.authors.length > 0) {
+      const author = bookData.authors[0];
+      const authorKey = author.author?.key || author.key;
+
+      if (authorKey) {
+        const authorUrl = `https://openlibrary.org${authorKey}.json`;
+        const authorResponse = await fetch(authorUrl);
+        
+        if (authorResponse.ok) {
+          const authorData = await authorResponse.json();
+          authorName = authorData.name || authorData.personal_name || 'Unknown Author';
+        }
       }
     }
-    
-    // Get the cover ID if available
-    const coverId = bookData.covers?.[0];
-    
-    // Format the response
+
+    // Format response
     const formattedBook = {
-      openLibraryId: `/works/${workId}`,
+      openLibraryId: `/works/${bookId}`,
       title: bookData.title,
       author: authorName,
-      description: bookData.description?.value || bookData.description || '',
-      coverUrl: coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : null,
+      description: typeof bookData.description === 'object' ? 
+                  bookData.description.value || '' : 
+                  bookData.description || '',
+      coverUrl: bookData.covers ? 
+                `https://covers.openlibrary.org/b/id/${bookData.covers[0]}-L.jpg` : 
+                null,
       publishDate: bookData.first_publish_date || 'Unknown',
       subjects: bookData.subjects || []
     };
-    
+
     res.json(formattedBook);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch book details' });
