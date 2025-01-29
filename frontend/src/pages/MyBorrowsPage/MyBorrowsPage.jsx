@@ -33,16 +33,19 @@ export default function MyBorrowsPage({ user }) {
     }
   }, [user]);
 
-  const handleReturn = async (borrowId) => {
+  const handleReturn = async (borrow_id) => {
     try {
-      const returnedBorrow = await returnBook(borrowId);
-      // Update the borrows list with the returned data
-      const updatedBorrows = borrows.map(borrow => 
-        borrow._id === borrowId ? returnedBorrow : borrow
-      );
-      setBorrows(updatedBorrows);
+      const response = await returnBook(borrow_id);
+      if (response && response.borrow) {
+        // Update the borrows list with the returned data
+        const updatedBorrows = borrows.map(b => 
+          b._id === borrow_id ? response.borrow : b
+        );
+        setBorrows(updatedBorrows);
+      }
     } catch (err) {
-      setError('Failed to return book. Please try again.');
+      console.error('Error returning book:', err);
+      setError('Failed to return book');
     }
   };
 
@@ -93,8 +96,10 @@ export default function MyBorrowsPage({ user }) {
     );
   }
 
-  const activeBorrows = borrows.filter(borrow => !borrow.is_returned);
-  const returnedBorrows = borrows.filter(borrow => borrow.is_returned);
+  // Filter out any undefined or null values and then separate active and returned borrows
+  const validBorrows = borrows.filter(borrow => borrow && typeof borrow === 'object');
+  const activeBorrows = validBorrows.filter(borrow => !borrow.is_returned);
+  const returnedBorrows = validBorrows.filter(borrow => borrow.is_returned);
 
   return (
     <div className="bg-white">

@@ -125,6 +125,9 @@ export default function HomePage({ user }) {
                         {new Date(review.createdAt).toLocaleDateString()}
                       </time>
                       <div className="text-yellow-400">{'★'.repeat(review.rating)}{'☆'.repeat(5-review.rating)}</div>
+                      {review.user && (
+                        <span className="text-gray-500">by {review.user.name}</span>
+                      )}
                     </div>
                     <div className="group relative">
                       <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
