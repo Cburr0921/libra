@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import libraryHero from '../../assets/images/library-hero.jpg';
+import { getToken } from '../../services/authService';
 
 export default function HomePage({ user }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -10,23 +11,25 @@ export default function HomePage({ user }) {
 
   useEffect(() => {
     // Fetch active borrows if user is logged in
-    if (user && user.token) {
-      fetch('/api/borrows/user', {
-        headers: {
-          'Authorization': `Bearer ${user.token}`
-        }
-      })
-      .then(res => res.ok ? res.json() : Promise.reject(`HTTP error! status: ${res.status}`))
-      .then(data => {
-        if (Array.isArray(data)) {
-          const active = data.filter(borrow => !borrow.is_returned);
-          setActiveBorrows(active);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching borrows:', error);
-        setActiveBorrows([]);
-      });
+    if (user) {
+      const token = getToken();
+      if (token) {
+        fetch('/api/borrows/user', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(res => res.ok ? res.json() : Promise.reject(`HTTP error! status: ${res.status}`))
+        .then(data => {
+          if (Array.isArray(data)) {
+            const active = data.filter(borrow => !borrow.is_returned);
+            setActiveBorrows(active);
+          }
+        })
+        .catch(error => {
+          setActiveBorrows([]);
+        });
+      }
     }
 
     // Fetch all recent reviews
@@ -38,7 +41,6 @@ export default function HomePage({ user }) {
         }
       })
       .catch(error => {
-        console.error('Error fetching reviews:', error);
         setRecentReviews([]);
       });
   }, [user]);
@@ -169,9 +171,15 @@ export default function HomePage({ user }) {
                       <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                         <Link to={`/books/works/${borrow.book_api_id.split('/').pop()}`}>
                           <span className="absolute inset-0" />
-                          {borrow.title}
+                          {borrow.book_title}
                         </Link>
                       </h3>
+                      <p className="mt-2 text-sm leading-6 text-gray-600">
+                        by {borrow.book_author}
+                      </p>
+                      <p className="mt-2 text-xs text-gray-500">
+                        Borrowed on: {new Date(borrow.borrow_date).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
                 </article>
