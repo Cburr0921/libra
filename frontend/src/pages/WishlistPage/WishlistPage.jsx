@@ -153,7 +153,7 @@ export default function WishlistPage({ user }) {
                         )}
                         <div className="flex justify-between items-center">
                           <Link
-                            to={`/books/${item.book_api_id}`}
+                            to={`/books/works/${item.book_api_id}`}
                             className="text-blue-600 hover:text-blue-800 font-medium"
                           >
                             View Details
@@ -192,7 +192,7 @@ export default function WishlistPage({ user }) {
                         )}
                         <div className="flex justify-between items-center">
                           <Link
-                            to={`/books/${item.book_api_id}`}
+                            to={`/books/works/${item.book_api_id}`}
                             className="text-blue-600 hover:text-blue-800 font-medium"
                           >
                             View Details
