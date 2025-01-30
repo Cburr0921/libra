@@ -8,6 +8,7 @@
 
 ## :fire: Getting Started
 ### [Deployed Link](https://libraa-f99a652e290b.herokuapp.com/)
+### [Planning Link](https://trello.com/b/sy4qDwaf/project-3)
 
 <div align="center">
   <img src="frontend/src/assets/LandingPage.png" alt="Libra Landing Page" width="800"/>
