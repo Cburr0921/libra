@@ -1,6 +1,6 @@
 <h1 align="center">Libra</h1>
 <div align="center">
-  <img src="frontend/public/libra-logo.svg" alt="Libra Logo" width="200"/>
+  <img src="frontend/src/assets/Logo.png" alt="Libra Logo" width="200"/>
 </div>
 
 ## :books: About
@@ -8,6 +8,10 @@
 
 ## :fire: Getting Started
 ### [Deployed Link](https://libraa-f99a652e290b.herokuapp.com/)
+
+<div align="center">
+  <img src="frontend/src/assets/LandingPage.png" alt="Libra Landing Page" width="800"/>
+</div>
 
 ## :computer: Technologies Used
 ![React](https://img.shields.io/badge/-React-05122A?style=flat&logo=react)
